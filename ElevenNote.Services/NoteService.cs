@@ -62,6 +62,7 @@ namespace ElevenNote.Services
                     NoteId = note.Id,
                     Title = note.Title,
                     Content = note.Content,
+                    IsStarred = note.IsStarred,
                     CreatedUtc = note.CreatedUtc,
                     ModifiedUtc = note.ModifiedUtc
                 };
@@ -77,7 +78,9 @@ namespace ElevenNote.Services
                 var note = context.Notes.Single(n => n.Id == model.NoteId && n.OwnerId == _userId);
                 note.Title = model.Title;
                 note.Content = model.Content;
+                note.IsStarred = model.IsStarred;
                 note.ModifiedUtc = DateTimeOffset.UtcNow;
+
                 return context.SaveChanges() == 1;
             }
         }
