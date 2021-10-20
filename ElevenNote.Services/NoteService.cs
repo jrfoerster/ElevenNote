@@ -24,7 +24,7 @@ namespace ElevenNote.Services
                 OwnerId = _userId,
                 Title = model.Title,
                 Content = model.Content,
-                CreatedUtc = DateTimeOffset.Now
+                CreatedUtc = DateTimeOffset.UtcNow
             };
 
             using (var context = ApplicationDbContext.Create())
@@ -64,6 +64,20 @@ namespace ElevenNote.Services
                     CreatedUtc = note.CreatedUtc,
                     ModifiedUtc = note.ModifiedUtc
                 };
+
+                return model;
+            }
+        }
+
+        public bool UpdateNote(NoteEdit model)
+        {
+            using (var context = ApplicationDbContext.Create())
+            {
+                var note = context.Notes.Single(n => n.Id == model.NoteId && n.OwnerId == _userId);
+                note.Title = model.Title;
+                note.Content = model.Content;
+                note.ModifiedUtc = DateTimeOffset.UtcNow;
+                return context.SaveChanges() == 1;
             }
         }
     }
