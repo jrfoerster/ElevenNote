@@ -1,0 +1,32 @@
+﻿@model ElevenNote.Models.CategoryDetail
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2 class="text-center">@Model.CategoryName Notes</h2>
+
+<div class="container">
+    <h3>Notes (@Model.Notes.Count)</h3>
+    <div class="row">
+        @foreach (var note in Model.Notes)
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@note.Title</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>@note.Content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CategoryId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

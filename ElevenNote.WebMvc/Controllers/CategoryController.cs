@@ -1,52 +1,44 @@
-﻿using ElevenNote.Models;
+﻿using ElevenNote.Data;
+using ElevenNote.Models;
 using ElevenNote.Services;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ElevenNote.WebMvc.Controllers
 {
-    [Authorize]
-    public class NoteController : Controller
+    public class CategoryController : Controller
     {
-        private NoteService CreateNoteService()
+        private CategoryService CreateCategoryService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
-            return new NoteService(userId);
+            return new CategoryService(userId);
         }
 
         // GET: Note
         public ActionResult Index()
         {
-            var service = CreateNoteService();
-            var notes = service.GetNotes();
-            return View(notes);
+            var service = CreateCategoryService();
+            var categories = service.GetCategories();
+            return View(categories);
         }
 
         public ActionResult Create()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var service = new CategoryService(userId);
-            var categories = service.GetCategories();
-            ViewBag.Categories = categories
-                .OrderBy(c => c.CategoryName)
-                .Select(c => new SelectListItem()
-                {
-                    Text = c.CategoryName,
-                    Value = c.CategoryId.ToString()
-                });
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(NoteCreate model)
+        public ActionResult Create(CategoryCreate model)
         {
             if (ModelState.IsValid)
             {
-                var service = CreateNoteService();
-                if (service.CreateNote(model))
+                var service = CreateCategoryService();
+                if (service.CreateCategory(model))
                 {
                     TempData["SaveResult"] = "Your note was created.";
                     return RedirectToAction("Index");
@@ -59,21 +51,19 @@ namespace ElevenNote.WebMvc.Controllers
 
         public ActionResult Details(int id)
         {
-            var service = CreateNoteService();
-            var detail = service.GetNoteById(id);
+            var service = CreateCategoryService();
+            var detail = service.GetCategoryById(id);
             return View(detail);
         }
 
         public ActionResult Edit(int id)
         {
-            var service = CreateNoteService();
-            var detail = service.GetNoteById(id);
-            var model = new NoteEdit()
+            var service = CreateCategoryService();
+            var detail = service.GetCategoryById(id);
+            var model = new CategoryEdit()
             {
-                NoteId = detail.NoteId,
-                Title = detail.Title,
-                Content = detail.Content,
-                IsStarred = detail.IsStarred
+                CategoryId = detail.CategoryId,
+                CategoryName = detail.CategoryName
             };
 
             return View(model);
@@ -81,22 +71,22 @@ namespace ElevenNote.WebMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, NoteEdit model)
+        public ActionResult Edit(int id, CategoryEdit model)
         {
             if (ModelState.IsValid == false)
             {
                 return View(model);
             }
 
-            if (model.NoteId != id)
+            if (model.CategoryId != id)
             {
                 ModelState.AddModelError("", "Id Mismatch");
                 return View(model);
             }
 
-            var service = CreateNoteService();
+            var service = CreateCategoryService();
 
-            if (service.UpdateNote(model))
+            if (service.UpdateCategory(model))
             {
                 TempData["SaveResult"] = "Your note was updated.";
                 return RedirectToAction("Index");
@@ -108,9 +98,9 @@ namespace ElevenNote.WebMvc.Controllers
 
         public ActionResult Delete(int id)
         {
-            var service = CreateNoteService();
-            var model = service.GetNoteById(id);
-            return View(model);
+            var service = CreateCategoryService();
+            var detail = service.GetCategoryById(id);
+            return View(detail);
         }
 
         [HttpPost]
@@ -118,8 +108,8 @@ namespace ElevenNote.WebMvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeletePost(int id)
         {
-            var service = CreateNoteService();
-            service.DeleteNote(id);
+            var service = CreateCategoryService();
+            service.DeleteCategory(id);
             TempData["SaveResult"] = "Your note was deleted";
             return RedirectToAction("Index");
         }
