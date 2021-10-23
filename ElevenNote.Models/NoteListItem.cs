@@ -8,6 +8,9 @@ namespace ElevenNote.Models
         public int NoteId { get; set; }
         public string Title { get; set; }
 
+        [Display(Name = "Category")]
+        public string CategoryName { get; set; }
+
         [UIHint("Starred")]
         [Display(Name = "Important")]
         public bool IsStarred { get; set; }

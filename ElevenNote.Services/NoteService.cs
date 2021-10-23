@@ -2,6 +2,7 @@
 using ElevenNote.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace ElevenNote.Services
@@ -38,11 +39,13 @@ namespace ElevenNote.Services
             using (var context = ApplicationDbContext.Create())
             {
                 var query = context.Notes
+                    .Include(n => n.Category)
                     .Where(n => n.OwnerId == _userId)
                     .Select(n => new NoteListItem()
                     {
                         NoteId = n.Id,
                         Title = n.Title,
+                        CategoryName = n.Category.CategoryName,
                         IsStarred = n.IsStarred,
                         CreatedUtc = n.CreatedUtc
                     });
@@ -55,12 +58,16 @@ namespace ElevenNote.Services
         {
             using (var context = ApplicationDbContext.Create())
             {
-                var note = context.Notes.Single(n => n.Id == id && n.OwnerId == _userId);
+                var note = context.Notes
+                    .Include(n => n.Category)
+                    .Single(n => n.Id == id && n.OwnerId == _userId);
+
                 var model = new NoteDetail()
                 {
                     NoteId = note.Id,
                     Title = note.Title,
                     Content = note.Content,
+                    CategoryName = note.Category.CategoryName,
                     IsStarred = note.IsStarred,
                     CreatedUtc = note.CreatedUtc,
                     ModifiedUtc = note.ModifiedUtc

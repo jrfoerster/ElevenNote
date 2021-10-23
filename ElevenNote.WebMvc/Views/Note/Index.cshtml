@@ -4,7 +4,7 @@
     ViewBag.Title = "Notes";
 }
 
-<h2>Notes</h2>
+<h2 class="text-center">Notes</h2>
 
 @if (TempData.ContainsKey("SaveResult"))
 {
@@ -16,10 +16,13 @@
     </div>
 }
 
-<table class="table table-striped">
+<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.IsStarred)
@@ -35,6 +38,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsStarred, new { id = item.NoteId })

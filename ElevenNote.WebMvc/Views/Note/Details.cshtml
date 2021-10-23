@@ -7,17 +7,9 @@
 <h2>Details</h2>
 
 <div>
-    <h4>NoteDetail</h4>
+    <h4>Note</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.NoteId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.NoteId)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Title)
         </dt>
@@ -32,6 +24,22 @@
 
         <dd>
             @Html.DisplayFor(model => model.Content)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsStarred)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsStarred, new { id = Model.NoteId })
         </dd>
 
         <dt>
@@ -53,6 +61,33 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.NoteId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.NoteId }, htmlAttributes: new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
 </p>
+
+@section scripts {
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            $("i[data-toggle='star']")
+                .css({ "cursor": "pointer" })
+                .click(function (e) {
+                    var target = $(e.target);
+                    var noteId = target.attr("data-id");
+                    var starSet = target.hasClass("glyphicon-star");
+
+                    $.ajax({
+                        method: starSet ? "DELETE" : "PUT",
+                        url: "/api/note/" + noteId + "/star",
+                        data: null
+                    })
+                        .done(function (r) {
+                            target.removeClass();
+                            target.addClass("glyphicon " + (starSet ? "glyphicon-star-empty" : "glyphicon-star"));
+                        })
+                        .fail(function (r) {
+                            alert("Failed to change star status");
+                        });
+                });
+        });
+    </script>
+}

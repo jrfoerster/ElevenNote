@@ -6,6 +6,16 @@
 
 <h2 class="text-center">All Categories</h2>
 
+@if (TempData.ContainsKey("SaveResult"))
+{
+    <div class="alert alert-success fade in" role="alert">
+        @TempData["SaveResult"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+}
+
 <table class="table">
     <tr>
         <th>

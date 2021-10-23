@@ -41,12 +41,12 @@ namespace ElevenNote.WebMvc.Controllers
                 var service = CreateCategoryService();
                 if (service.CreateCategory(model))
                 {
-                    TempData["SaveResult"] = "Your note was created.";
+                    TempData["SaveResult"] = "Your category was created.";
                     return RedirectToAction("Index");
                 }
             }
 
-            ModelState.AddModelError("", "Note could not be created.");
+            ModelState.AddModelError("", "Category could not be created.");
             return View(model);
         }
 
