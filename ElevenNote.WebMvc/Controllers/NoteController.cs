@@ -2,6 +2,7 @@
 using ElevenNote.Services;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -16,6 +17,25 @@ namespace ElevenNote.WebMvc.Controllers
             return new NoteService(userId);
         }
 
+        private CategoryService CreateCategoryService()
+        {
+            var userId = Guid.Parse(User.Identity.GetUserId());
+            return new CategoryService(userId);
+        }
+
+        private IEnumerable<SelectListItem> GetViewBagCategories()
+        {
+            var service = CreateCategoryService();
+            var categories = service.GetCategories()
+                .OrderBy(c => c.CategoryName)
+                .Select(c => new SelectListItem()
+                {
+                    Text = c.CategoryName,
+                    Value = c.CategoryId.ToString()
+                });
+            return categories;
+        }
+
         // GET: Note
         public ActionResult Index()
         {
@@ -26,16 +46,7 @@ namespace ElevenNote.WebMvc.Controllers
 
         public ActionResult Create()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var service = new CategoryService(userId);
-            var categories = service.GetCategories();
-            ViewBag.Categories = categories
-                .OrderBy(c => c.CategoryName)
-                .Select(c => new SelectListItem()
-                {
-                    Text = c.CategoryName,
-                    Value = c.CategoryId.ToString()
-                });
+            ViewBag.Categories = GetViewBagCategories();
             return View();
         }
 
@@ -73,9 +84,11 @@ namespace ElevenNote.WebMvc.Controllers
                 NoteId = detail.NoteId,
                 Title = detail.Title,
                 Content = detail.Content,
+                CategoryId = detail.CategoryId,
                 IsStarred = detail.IsStarred
             };
 
+            ViewBag.Categories = GetViewBagCategories();
             return View(model);
         }
 

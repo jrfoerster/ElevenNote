@@ -10,16 +10,22 @@ namespace ElevenNote.WebMvc.Controllers.WebApi
     [RoutePrefix("api/Note")]
     public class NoteController : ApiController
     {
-        private bool SetStarState(int noteId, bool newState)
+        private NoteService CreateNoteService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
-            var service = new NoteService(userId);
+            return new NoteService(userId);
+        }
+
+        private bool SetStarState(int noteId, bool newState)
+        {
+            var service = CreateNoteService();
             var detail = service.GetNoteById(noteId);
 
             var updated = new NoteEdit()
             {
                 NoteId = detail.NoteId,
                 Title = detail.Title,
+                CategoryId = detail.CategoryId,
                 Content = detail.Content,
                 IsStarred = newState
             };
