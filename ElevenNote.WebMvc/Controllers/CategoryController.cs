@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace ElevenNote.WebMvc.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private CategoryService CreateCategoryService()
