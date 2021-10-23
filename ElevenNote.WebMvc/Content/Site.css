@@ -1,12 +1,14 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background: repeating-linear-gradient(#0e67d4, #16bc9e);
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 1;
+    background: rgb(0,36,32);
+    background-color: linear-gradient(90deg, rgba(0,36,32,1) 57%, rgba(17,238,223,1) 87%, rgba(0,212,255,1) 100%);
     /*background-color: #ff6a00;*/
 }
 
@@ -22,4 +24,12 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+h2 {
+    color: white;
+}
+
+p {
+    color: white;
 }
