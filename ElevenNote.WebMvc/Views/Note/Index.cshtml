@@ -6,10 +6,6 @@
 
 <h2>Notes</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
 @if (TempData.ContainsKey("SaveResult"))
 {
     <div class="alert alert-success fade in" role="alert">
@@ -20,11 +16,8 @@
     </div>
 }
 
-<table class="table">
+<table class="table table-striped">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.NoteId)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Title)
         </th>
@@ -41,9 +34,6 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NoteId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
@@ -53,14 +43,18 @@
                 @Html.DisplayFor(modelItem => item.CreatedUtc)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.NoteId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.NoteId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.NoteId })
+                @Html.ActionLink("Edit", "Edit", new { id = item.NoteId }, htmlAttributes: new { @class = "btn btn-warning" })
+                @Html.ActionLink("Details", "Details", new { id = item.NoteId }, htmlAttributes: new { @class = "btn btn-info" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.NoteId }, htmlAttributes: new { @class = "btn btn-danger" })
             </td>
         </tr>
     }
 
 </table>
+
+<p class="text-center">
+    @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-default" })
+</p>
 
 @section scripts {
     <script language="javascript" type="text/javascript">
